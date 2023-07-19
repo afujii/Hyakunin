@@ -10,6 +10,7 @@
 # Main17 の目標は、　Control を　Kami　Simo　と同列で定義して、
 # Messenger を　global に設置すること。-> global 失敗
 # message に正解を渡す。各Sprite が　自身の正誤を知っている。
+# 2023/ 7/19 Last Updated
 
 
 
@@ -36,7 +37,7 @@ FONT_SIZE = 30
 IMAG_SIZE = (90,110)
 KAMI_IMG = "./images/kaminoku.png"
 SIMO_IMG = "./images/simonoku.png"
-CONT_IMG = "./images/burnfly.png"
+CONT_IMG = "./images/control.png" # Cotral は、背景と同じ色の画像
 global seikai
 global kotae
 seikai = 0
@@ -117,12 +118,23 @@ class Messenger(object):
 
 #######################################
 class Controler(Player):
+    def __init__(self, filename, id, xy, ScTex):
+        super().__init__(filename, id, xy, ScTex)
+        self.tokuten = 0 # 得点の管理はControl で行う
+        
     def callback(self, message_type, num):
-        self.speak(message_type+str(num))
+        #self.speak(message_type+str(num))
+        #self.speak("得点：　" + str(tokuten) )
         if message_type == 'answer':
+            if num:
+                self.tokuten += 1
+            else :
+                self.tokuten -= 1 # 間違えたら減点
+            self.speak("得点：　" + str(self.tokuten) )   
             seikai = randint(1,3)
             kotae = sample([i for i in range(99)],3)
             m.add_news('question', (seikai, kotae))
+            
                     
 class Kaminoku(Player) :
     """
